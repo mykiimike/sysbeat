@@ -5,7 +5,7 @@ function userload(app, options) {
 	var self = this;
 	this.app = app;
 	this.options = {
-		timer: options.timer || 10000
+		timer: options.timer || 1000
 	}
 
 	function rotate() {
@@ -32,8 +32,13 @@ function userload(app, options) {
 				if(!file) {
 					// insert data
 					var now = new Date().getTime();
-					for(var service in rendered)
-						self.app.insert('userload', {service: service}, rendered[service], now);
+					for(var service in rendered) {
+						var p = rendered[service];
+						for(var key in p) {
+							self.app.insert('userload', {service: service, key: key}, {value: p[key]}, now);
+						}
+					}
+						
 					
 					renderer = {};
 					setTimeout(rotate, self.options.timer);
