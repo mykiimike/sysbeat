@@ -1,0 +1,17 @@
+{
+	"influxDB": {
+		"url": "http://localhost:8086",
+		"db": "monitor"
+	},
+	"plugins": {
+		"heartbeat": {},
+		"memory": {},
+		"diskio": {},
+		"disks": {},
+		"network": {},
+		"openfiles": {},
+		"loadavg": {},
+		"userload": {},
+		"cpu": {}
+	}
+}
