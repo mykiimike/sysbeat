@@ -10,8 +10,12 @@ function openfiles(app, options) {
 
 	function rotate() {
 		fs.readFile('/proc/sys/fs/file-nr', { encoding: 'utf8' }, function(err, data) {
-			if(err)
-				return cb(err);
+			if(err) {
+				setTimeout(rotate, self.options.timer*2);
+				debug('Error reading /proc/sys/fs/file-nr: '+err);
+				return;
+			}
+
 
 			data = data.split(/\s+/);	
 			var now = new Date().getTime();

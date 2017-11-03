@@ -11,6 +11,11 @@ function sysbeat(options) {
 
 	debug("Initializing Sysbeat");
 
+	// initialize libs
+	this.lib = {
+		system: new (require('./lib/system'))(this)
+	}
+
 	if(!options)
 		options = {};
 	this.plugins = {};
