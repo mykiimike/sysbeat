@@ -1,6 +1,7 @@
 "use strict";
 
 const debug = require('debug')('sysbeat');
+const debugInflux = require('debug')('sysbeat:influxdb');
 const fs = require('fs');
 const http = require('http');
 const URL = require('url');
@@ -146,7 +147,7 @@ sysbeat.prototype.influxInit = function() {
 	opt.parsedURL = URL.parse(opt.url);
 	opt.writeURL = '/write?db='+opt.db+'&precision=ms';
 	
-	debug("Initializing connection to "+opt.url+' with '+opt.concurrent+' concurrent data points');
+	debugInflux("Initializing connection to "+opt.url+' with '+opt.concurrent+' concurrent data points');
 }
 
 sysbeat.prototype.influxPostData = function(lines, done) {
@@ -168,7 +169,7 @@ sysbeat.prototype.influxPostData = function(lines, done) {
 	// Set up the request
 	var postReq = http.request(postOptions, function(res) {
 		res.setEncoding('utf8');
-		debug('InfluxDB got response with status code '+res.statusCode);
+		debugInflux('InfluxDB got response with status code '+res.statusCode);
 		res.on('data', () => {});
 		res.on('end', () => {
 			process.nextTick(done);
