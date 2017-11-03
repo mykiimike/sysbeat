@@ -76,7 +76,7 @@ function userload(app, options) {
 						var stat = data.split(" ");
 					
 						if(!rendered[service])
-							rendered[service] = {utime: 0, stime: 0, cutime: 0, sutime: 0};
+							rendered[service] = {utime:0, stime:0, cutime:0, sutime:0, memPeak:0, memSize:0, memSwap:0};
 
 						var p = rendered[service];
 
@@ -84,6 +84,10 @@ function userload(app, options) {
 						p.stime += parseInt(stat[14]);
 						p.cutime += parseInt(stat[15]);
 						p.sutime += parseInt(stat[16]);
+					
+						p.memPeak = (parsed['VmPeak'] ? parsed['VmPeak'].trim().split(' ')[0] : 0);
+						p.memSize = (parsed['VmSize'] ? parsed['VmSize'].trim().split(' ')[0] : 0);
+						p.memSwap = (parsed['VmSwap'] ? parsed['VmSwap'].trim().split(' ')[0] : 0);
 
 						// slow down
 						setTimeout(readfile, 1);
