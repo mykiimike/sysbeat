@@ -1,7 +1,7 @@
 {
   "name": "sysbeat",
   "description": "Sysbeat is a metric collector",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "homepage": "https://github.com/mykiimike/sysbeat",
   "author": "Michael Vergoz",
   "main" : "index.js",
