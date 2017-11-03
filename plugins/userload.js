@@ -5,7 +5,7 @@ function userload(app, options) {
 	var self = this;
 	this.app = app;
 	this.options = {
-		timer: options.timer || 1000
+		timer: options.timer || 10000
 	}
 
 	function rotate() {
