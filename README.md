@@ -1,7 +1,7 @@
 ## Background
 
 ```bash
-forever start  --uid "sysbeat" /usr/lib/node_modules/sysbeat/bin/sysbeat.js /etc/sysbeat.json
+forever start -a --uid "sysbeat" /usr/lib/node_modules/sysbeat/bin/sysbeat.js /etc/sysbeat.json
 ```
 
 ## Plugin development
