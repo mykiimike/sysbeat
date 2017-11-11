@@ -1,7 +1,6 @@
 "use strict";
 
 const debug = require('debug')('sysbeat');
-const debugInflux = require('debug')('sysbeat:influxdb');
 const fs = require('fs');
 const http = require('http');
 const URL = require('url');
@@ -83,7 +82,7 @@ sysbeat.prototype.loadPlugin = function(name, options) {
 	debug("Loading of "+object.getInfo()+' completed');
 }
 
-sysbeat.prototype.insert = function(zone, tags, values, date) {
+sysbeat.prototype.dataPoint = function(zone, tags, values, date) {
 	this.emit("dataPoint", zone, tags, values, date);
 }
 
