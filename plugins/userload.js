@@ -35,11 +35,11 @@ function userload(app, options) {
 					for(var service in rendered) {
 						var p = rendered[service];
 						for(var key in p) {
-							self.app.insert('userload', {service: service, key: key}, {value: p[key]}, now);
+							self.app.dataPoint('userload', {service: service, key: key}, {value: p[key]}, now);
 						}
 					}
-						
-					
+
+
 					renderer = {};
 					setTimeout(rotate, self.options.timer);
 					return;
@@ -53,7 +53,7 @@ function userload(app, options) {
 						debug('Error reading '+file+'/status: '+err);
 						return;
 					}
-					
+
 					// parse data
 					var parsed = {};
 					var lines = data.split("\n");
@@ -67,7 +67,7 @@ function userload(app, options) {
 
 					// prepare data
 					var service = self.app.lib.system.getUserId(parsed['Uid'])[0];
-					
+
 					fs.readFile(file+'/stat', { encoding: 'utf8' }, function(err, data) {
 						if(err) {
 							// slow down
@@ -79,7 +79,7 @@ function userload(app, options) {
 
 
 						var stat = data.split(" ");
-					
+
 						if(!rendered[service])
 							rendered[service] = {utime:0, stime:0, cutime:0, sutime:0, memPeak:0, memSize:0, memSwap:0};
 
@@ -89,7 +89,7 @@ function userload(app, options) {
 						p.stime += parseInt(stat[14]);
 						p.cutime += parseInt(stat[15]);
 						p.sutime += parseInt(stat[16]);
-					
+
 						p.memPeak = (parsed['VmPeak'] ? parsed['VmPeak'].trim().split(' ')[0] : 0);
 						p.memSize = (parsed['VmSize'] ? parsed['VmSize'].trim().split(' ')[0] : 0);
 						p.memSwap = (parsed['VmSwap'] ? parsed['VmSwap'].trim().split(' ')[0] : 0);

@@ -15,10 +15,10 @@ function loadavg(app, options) {
 
 			var load = data.trim().split(' ').slice(0, 3);
 			var now = new Date().getTime();
-			self.app.insert('loadavg', {key: '1m'}, {value: load[0]}, now);
-			self.app.insert('loadavg', {key: '5m'}, {value: load[1]}, now);
-			self.app.insert('loadavg', {key: '15m'}, {value: load[2]}, now);
-			
+			self.app.dataPoint('loadavg', {key: '1m'}, {value: load[0]}, now);
+			self.app.dataPoint('loadavg', {key: '5m'}, {value: load[1]}, now);
+			self.app.dataPoint('loadavg', {key: '15m'}, {value: load[2]}, now);
+
 			setTimeout(rotate, self.options.timer);
 		});
 	}

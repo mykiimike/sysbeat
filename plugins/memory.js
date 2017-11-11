@@ -39,12 +39,12 @@ function memory(app, options) {
 				var t = lines[i].split(":");
 				if(!allowedTags.hasOwnProperty(t[0]))
 					continue;
-				self.app.insert('memory', {key: t[0].trim()}, {value: t[1].trim().split(" ")[0]}, now);
+				self.app.dataPoint('memory', {key: t[0].trim()}, {value: t[1].trim().split(" ")[0]}, now);
 			}
 
 			setTimeout(rotate, self.options.timer);
 		});
-		
+
 	}
 	setTimeout(rotate, self.options.timer);
 }

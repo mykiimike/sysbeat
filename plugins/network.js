@@ -44,7 +44,7 @@ function network(app, options) {
 					else
 						column = 'out-' + column;
 
-					self.app.insert('network', {'interface': itf, key: column }, {value: line[j]}, now);
+					self.app.dataPoint('network', {'interface': itf, key: column }, {value: line[j]}, now);
 				}
 			}
 

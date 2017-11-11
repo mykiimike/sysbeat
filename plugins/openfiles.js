@@ -17,11 +17,11 @@ function openfiles(app, options) {
 			}
 
 
-			data = data.split(/\s+/);	
+			data = data.split(/\s+/);
 			var now = new Date().getTime();
-			self.app.insert('openfiles', {key: 'allocated'}, {value: data[0]}, now);
-			self.app.insert('openfiles', {key: 'unused'}, {value: data[1]}, now);
-			self.app.insert('openfiles', {key: 'available'}, {value: data[2]}, now);
+			self.app.dataPoint('openfiles', {key: 'allocated'}, {value: data[0]}, now);
+			self.app.dataPoint('openfiles', {key: 'unused'}, {value: data[1]}, now);
+			self.app.dataPoint('openfiles', {key: 'available'}, {value: data[2]}, now);
 
 			setTimeout(rotate, self.options.timer);
 		});

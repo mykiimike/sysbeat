@@ -10,7 +10,7 @@ function heartbeat(app, options) {
 
 	function hb() {
 		var now = new Date().getTime();
-		self.app.insert('heartbeat', {}, {timing: now-displace}, now);
+		self.app.dataPoint('heartbeat', {}, {timing: now-displace}, now);
 		displace = now;
 		timer = setTimeout(hb, self.options.timer);
 	}

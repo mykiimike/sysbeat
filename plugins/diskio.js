@@ -47,13 +47,13 @@ function diskIO(app, options) {
 				var now = new Date().getTime();
 				for(var j = 3 ; j < line.length ; j++) {
 					var field = fields[j];
-					self.app.insert('diskio', {device: device, key: field}, {value: line[j]}, now);
+					self.app.dataPoint('diskio', {device: device, key: field}, {value: line[j]}, now);
 				}
 			}
 
 			setTimeout(rotate, self.options.timer);
 		});
-		
+
 	}
 	setTimeout(rotate, self.options.timer);
 }

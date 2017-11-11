@@ -36,12 +36,12 @@ function cpu(app, options) {
 					if(tag == 'cpu')
 						for(var j = 1 ; j < line.length ; j++) {
 							var field = coresFields[j];
-							self.app.insert('cpu', {cpu: tag, key: field}, {value: line[j]}, now);
+							self.app.dataPoint('cpu', {cpu: tag, key: field}, {value: line[j]}, now);
 						}
-					else {	
+					else {
 						for(var j = 1 ; j < line.length ; j++) {
 							var field = coresFields[j];
-							self.app.insert('cpu', {cpu: tag.substr(0,3)+'.'+tag.substr(3), key: field}, {value: line[j]}, now);
+							self.app.dataPoint('cpu', {cpu: tag.substr(0,3)+'.'+tag.substr(3), key: field}, {value: line[j]}, now);
 						}
 					}
 
@@ -50,7 +50,7 @@ function cpu(app, options) {
 
 			setTimeout(rotate, self.options.timer);
 		});
-		
+
 	}
 	setTimeout(rotate, self.options.timer);
 }
