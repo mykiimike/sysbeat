@@ -42,17 +42,10 @@ function sysbeat(options) {
 
 	// schedule traps
 	function trapShot() {
-		for(let name in self.plugins) {
-			let p = self.plugins[name];
-			if(p.trap) {
-				p.trap((err, traps) => {
-					if(err) {
-						console.log('Trap '+name+' is errored');
-						return;
-					}
-					self.emit("dataTrap", traps);
-				});
-			}
+		for(var name in self.plugins) {
+			var p = self.plugins[name];
+			if(p.trap)
+				p.trap();
 		}
 	}
 	trapShot();
@@ -104,6 +97,8 @@ sysbeat.prototype.dataPoint = function(zone, tags, values, date) {
 	this.emit("dataPoint", zone, tags, values, date);
 }
 
-
+sysbeat.prototype.dataTrap = function(trap) {
+	this.emit("dataTrap", trap);
+}
 
 module.exports = sysbeat;

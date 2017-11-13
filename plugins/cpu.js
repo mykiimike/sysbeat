@@ -1,6 +1,5 @@
 const debug = require('debug')('sysbeat:cpu');
 const fs = require('fs');
-const os = require('os');
 
 const coresFields = [
 	'tag', 'user', 'nice', 'system', 'idle', 'iowait', 'irq', 'softirq', 'steal', 'guest', 'guest_nice',
@@ -68,14 +67,14 @@ const trapCpu = {
 	'address_sizes': true,
 }
 
-cpu.prototype.trap = function(cb) {
+cpu.prototype.trap = function() {
 	var ret = {};
-	var c = os.cpus()[0];
+	var self = this;
+
 	debug('Acquiring informations from /proc/cpuinfo');
 	fs.readFile('/proc/cpuinfo', { encoding: 'utf8' }, function(err, data) {
 		if(err) {
 			debug('Error reading /proc/cpuinfo: '+err);
-			if(cb) cb(err)
 			return;
 		}
 
@@ -93,7 +92,7 @@ cpu.prototype.trap = function(cb) {
 			}
 		}
 
-		if(cb) cb(null, ret)
+		self.app.dataTrap(ret);
 	});
 
 }
