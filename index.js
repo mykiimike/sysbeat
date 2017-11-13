@@ -39,6 +39,24 @@ function sysbeat(options) {
 	// iterate list of plugins
 	for(var name in options.plugins)
 		this.loadPlugin(name, options.plugins[name]);
+
+	// schedule traps
+	function trapShot() {
+		for(let name in self.plugins) {
+			let p = self.plugins[name];
+			if(p.trap) {
+				p.trap((err, traps) => {
+					if(err) {
+						console.log('Trap '+name+' is errored');
+						return;
+					}
+					self.emit("dataTrap", traps);
+				});
+			}
+		}
+	}
+	trapShot();
+	schedule.scheduleJob("* * * * *", trapShot);
 }
 // copy prototypes
 util.inherits(sysbeat, EventEmitter);
@@ -64,6 +82,9 @@ sysbeat.prototype.loadPlugin = function(name, options) {
 		process.exit(-1);
 	}
 
+	// plant object
+	this.plugins[name] = object;
+
 	// scheduler
 	if(object.getSchedule) {
 		// tick
@@ -72,18 +93,17 @@ sysbeat.prototype.loadPlugin = function(name, options) {
 			process.exit(-1);
 		}
 
-		// plant object
-		this.plugins[name] = object;
-
 		// plant schedule
 		schedule.scheduleJob(object.getSchedule(), object.tick.bind(object));
 	}
 
-	debug("Loading of "+object.getInfo()+' completed');
+	debug("Loading "+object.getInfo()+' completed');
 }
 
 sysbeat.prototype.dataPoint = function(zone, tags, values, date) {
 	this.emit("dataPoint", zone, tags, values, date);
 }
+
+
 
 module.exports = sysbeat;

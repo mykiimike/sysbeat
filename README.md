@@ -1,4 +1,5 @@
 # Sysbeat
+> Fullstack machine informations collector running in Standalone or In-App and supporting influxDB
 
 ## Standalone usage
 
@@ -31,6 +32,21 @@ And run:
 ```bash
 forever start -a --uid "sysbeat" /usr/lib/node_modules/sysbeat/bin/sysbeat.js /etc/sysbeat.json
 ```
+
+## Supported Plugins
+
+* **cpu**: CPU stats
+* **diskio**: Disks I/O
+* **disks**: Disks usage
+* **heartbeat**: Sysbeat's Heartbeat
+* **loadavg**: Machine Load average
+* **memory**: Memory usage
+* **network**: Network Usage
+* **openfiles**: Open files/system
+* **userload**: User and kernel land load for each user
+
+## Grafana integration
+
 
 ## In-App usage
 
@@ -79,7 +95,7 @@ You can use **.tick()** (and the internal scheduler) if you want but it's not ne
 
 Your functions MUST NOT block.
 
-Here is an example of the heartbeat plugin
+Here is an example of the [heartbeat](./plugins/heartbeat.js) plugin
 
 ```javascript
 function heartbeat(app, options) {

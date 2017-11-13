@@ -1,5 +1,6 @@
 const debug = require('debug')('sysbeat:cpu');
 const fs = require('fs');
+const os = require('os');
 
 const coresFields = [
 	'tag', 'user', 'nice', 'system', 'idle', 'iowait', 'irq', 'softirq', 'steal', 'guest', 'guest_nice',
@@ -59,6 +60,42 @@ cpu.prototype.getInfo = function() {
 	return("CPU statistics");
 }
 
+const trapCpu = {
+	'vendor_id': true,
+	'model_name': true,
+	'cache_size': true,
+	'flags': true,
+	'address_sizes': true,
+}
 
+cpu.prototype.trap = function(cb) {
+	var ret = {};
+	var c = os.cpus()[0];
+	debug('Acquiring informations from /proc/cpuinfo');
+	fs.readFile('/proc/cpuinfo', { encoding: 'utf8' }, function(err, data) {
+		if(err) {
+			debug('Error reading /proc/cpuinfo: '+err);
+			if(cb) cb(err)
+			return;
+		}
+
+		var lines = data.split('\n');
+		var now = new Date().getTime();
+
+		for(var i = 0 ; i < lines.length ; i++) {
+			var line = lines[i].split(':');
+			if(line.length == 2) {
+				var k = line[0].trim().replace(' ', '_');
+				if(trapCpu[k] === true) {
+					var v = line[1].trim();
+					ret[k] = v;
+				}
+			}
+		}
+
+		if(cb) cb(null, ret)
+	});
+
+}
 
 module.exports = cpu;
