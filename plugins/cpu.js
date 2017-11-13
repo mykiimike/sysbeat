@@ -88,7 +88,7 @@ cpu.prototype.trap = function(cb) {
 				var k = line[0].trim().replace(' ', '_');
 				if(trapCpu[k] === true) {
 					var v = line[1].trim();
-					ret[k] = v;
+					ret['cpu.'+k] = v;
 				}
 			}
 		}
