@@ -39,17 +39,6 @@ function sysbeat(options) {
 	// iterate list of plugins
 	for(var name in options.plugins)
 		this.loadPlugin(name, options.plugins[name]);
-
-	// schedule traps
-	function trapShot() {
-		for(var name in self.plugins) {
-			var p = self.plugins[name];
-			if(p.trap)
-				p.trap();
-		}
-	}
-	trapShot();
-	schedule.scheduleJob("* * * * *", trapShot);
 }
 // copy prototypes
 util.inherits(sysbeat, EventEmitter);
@@ -98,6 +87,7 @@ sysbeat.prototype.dataPoint = function(zone, tags, values, date) {
 }
 
 sysbeat.prototype.dataTrap = function(trap) {
+	console.log(trap);
 	this.emit("dataTrap", trap);
 }
 

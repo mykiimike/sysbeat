@@ -12,6 +12,7 @@
 		"openfiles": {},
 		"loadavg": {},
 		"userload": {},
+		"routes": {},
 		"cpu": {}
 	}
 }

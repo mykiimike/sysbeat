@@ -4,7 +4,7 @@
   "version": "0.1.5",
   "homepage": "https://github.com/mykiimike/sysbeat",
   "author": "Michael Vergoz",
-  "main" : "index.js",
+  "main": "index.js",
   "directories": {
     "lib": "./lib"
   },
@@ -14,11 +14,12 @@
     "node": ">= 0.10.3"
   },
   "dependencies": {
-    "node-jen": "^1.0.4",
     "cli-color": "^1.1.0",
     "commander": "^2.9.0",
-    "node-schedule": "^1.2.5",
-    "debug": "^2.6.6"
+    "debug": "^2.6.6",
+    "network-calculator": "^2.0.1",
+    "node-jen": "^1.0.4",
+    "node-schedule": "^1.2.5"
   },
   "bin": {
     "sysbeat": "bin/sysbeat.js"

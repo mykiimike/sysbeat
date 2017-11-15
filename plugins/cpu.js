@@ -5,13 +5,23 @@ const coresFields = [
 	'tag', 'user', 'nice', 'system', 'idle', 'iowait', 'irq', 'softirq', 'steal', 'guest', 'guest_nice',
 ];
 
+const trapCpu = {
+	'vendor_id': true,
+	'model_name': true,
+	'cache_size': true,
+	'flags': true,
+	'address_sizes': true,
+}
+
 function cpu(app, options) {
 	var self = this;
 	this.app = app;
 	this.options = {
-		timer: options.timer || 10000
+		timer: options.timer || 10000,
+		trapTimer: options.trapTimer || 60000,
 	}
 
+	// cpu statistics
 	function rotate() {
 		fs.readFile('/proc/stat', { encoding: 'utf8' }, function(err, data) {
 			if(err) {
@@ -50,51 +60,45 @@ function cpu(app, options) {
 
 			setTimeout(rotate, self.options.timer);
 		});
-
 	}
+	rotate();
 	setTimeout(rotate, self.options.timer);
+
+	// cpu traps
+	function trap() {
+		fs.readFile('/proc/cpuinfo', { encoding: 'utf8' }, function(err, data) {
+			if(err) {
+				debug('Error reading /proc/cpuinfo: '+err);
+				return;
+			}
+			var ret = {cpu: {}};
+
+			var lines = data.split('\n');
+			var now = new Date().getTime();
+
+			for(var i = 0 ; i < lines.length ; i++) {
+				var line = lines[i].split(':');
+				if(line.length == 2) {
+					var k = line[0].trim().replace(' ', '_');
+					if(trapCpu[k] === true) {
+						var v = line[1].trim();
+						ret.cpu[k] = v;
+					}
+				}
+			}
+
+			self.app.dataTrap(ret);
+		});
+	}
+	trap();
+	setTimeout(rotate, self.options.trapTimer);
+
 }
 
 cpu.prototype.getInfo = function() {
 	return("CPU statistics");
 }
 
-const trapCpu = {
-	'vendor_id': true,
-	'model_name': true,
-	'cache_size': true,
-	'flags': true,
-	'address_sizes': true,
-}
 
-cpu.prototype.trap = function() {
-	var ret = {};
-	var self = this;
-
-	debug('Acquiring informations from /proc/cpuinfo');
-	fs.readFile('/proc/cpuinfo', { encoding: 'utf8' }, function(err, data) {
-		if(err) {
-			debug('Error reading /proc/cpuinfo: '+err);
-			return;
-		}
-
-		var lines = data.split('\n');
-		var now = new Date().getTime();
-
-		for(var i = 0 ; i < lines.length ; i++) {
-			var line = lines[i].split(':');
-			if(line.length == 2) {
-				var k = line[0].trim().replace(' ', '_');
-				if(trapCpu[k] === true) {
-					var v = line[1].trim();
-					ret['cpu.'+k] = v;
-				}
-			}
-		}
-
-		self.app.dataTrap(ret);
-	});
-
-}
 
 module.exports = cpu;
